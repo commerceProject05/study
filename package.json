@@ -9,7 +9,8 @@
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --fix",
     "preview": "vite preview",
-    "format": "prettier --cache --write ."
+    "format": "prettier --cache --write .",
+    "server": "json-server --watch server/db.json --port 8080"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": [
