@@ -13,8 +13,12 @@ const Main = () => {
 
   const createTodolist = (event) => {
     if (event.key === 'Enter') {
-      setTodoItems([...todoItems,
-      event.target.value]);
+      setTodoItems([...todoItems, {
+        id: Date.now(),
+        text: event.target.value,
+        done: false
+      },
+      ]);
       event.target.value = ''
     }
   };
@@ -25,32 +29,42 @@ const Main = () => {
     setTodoItems(newTodoItems);
   }
   const allFilterHandler = () => {
-    setAllFilterclicked((prev) => !prev)
+    setAllFilterclicked(true)
+    setTodoFilterclicked(false)
+    setDoneFilterclicked(false)
+    if (allFilterclicked === true) {
+
+    }
+
   }
   const todoFilterHandler = () => {
-    setTodoFilterclicked((prev) => !prev)
+    setTodoFilterclicked(true)
+    setAllFilterclicked(false)
+    setDoneFilterclicked(false)
 
   }
   const doneFilterHandler = () => {
-    setDoneFilterclicked((prev) => !prev)
-
+    setDoneFilterclicked(true)
+    setAllFilterclicked(false)
+    setTodoFilterclicked(false)
   }
-
+  console.log(doneFilterclicked)
   return (
     <>
       <Container>
         <TodoInput onKeyPress={createTodolist}></TodoInput>
         <Filter>
           <div></div>
-          <FilterMenu>
-            <div onClick={allFilterHandler} allFilterclicked={allFilterclicked}>all</div>
-            <div onClick={todoFilterHandler}>todo</div>
-            <div onClick={doneFilterHandler}>done</div>
+          <FilterMenu >
+            <Allfilter allFilterclicked={allFilterclicked} onClick={allFilterHandler} >all</Allfilter>
+            <Todofilter todoFilterclicked={todoFilterclicked} onClick={todoFilterHandler}>todo</Todofilter>
+            <DoneFilter doneFilterclicked={doneFilterclicked} onClick={doneFilterHandler}>done</DoneFilter>
           </FilterMenu>
         </Filter>
         {todoItems.map((item, idx) =>
           <Todoitem key={idx}>
-            <div>{item}</div>
+            <div>d</div>
+            <div>{item.text}</div>
             <button onClick={() => deleteItem(idx)}>삭제</button>
           </Todoitem>
         )
@@ -101,14 +115,37 @@ const Filter = styled.div`
 
 const FilterMenu = styled.div`
   display: flex;
-  div{
+`
+
+const Allfilter = styled.div`
     cursor: pointer;
     margin-left: 1rem;
-    color: ${props => (props.allFilterclicked ? "red" : "white")};
+    color: ${props => (props.allFilterclicked ? "#D2FA64" : "white")};
     font-family: Roboto;
     font-size: 25px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    }
+`
+
+const Todofilter = styled.div`
+    cursor: pointer;
+    margin-left: 1rem;
+    color: ${props => (props.todoFilterclicked ? "#D2FA64" : "white")};
+    font-family: Roboto;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+`
+
+const DoneFilter = styled.div`
+    cursor: pointer;
+    margin-left: 1rem;
+    color: ${props => (props.doneFilterclicked ? "#D2FA64" : "white")};
+    font-family: Roboto;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
 `
