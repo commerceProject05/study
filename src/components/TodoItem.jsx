@@ -3,22 +3,18 @@ import styled from '@emotion/styled';
 
 import { theme } from '@/styles/theme.js';
 
-const TodoItem = ({ todo, onDeleteTodo }) => {
+const TodoItem = ({ todo, onDeleteTodo, onUpdatedTodoDone }) => {
   const { id, text, done } = todo;
 
-  const handleUpdateTodoDone = () => {
-    const updatedTodo = {
-      ...todo,
-      done: !todo.done,
-    };
-
-    // updateTodo(updatedTodo);
+  const handleDelete = (event) => {
+    event.stopPropagation();
+    onDeleteTodo(id);
   };
 
   return (
-    <TodoItemContainer onClick={handleUpdateTodoDone} data-todo-id={todo.id} $done={done}>
-      {text}
-      <Button onClick={() => onDeleteTodo(id)}>삭제</Button>
+    <TodoItemContainer onClick={() => onUpdatedTodoDone(id)} data-todo-id={id} $done={done}>
+      <span>{text}</span>
+      <Button onClick={handleDelete}>삭제</Button>
     </TodoItemContainer>
   );
 };
@@ -47,8 +43,10 @@ export const TodoItemContainer = styled.li`
   ${({ $done }) =>
     $done &&
     css`
-      text-decoration-line: line-through;
-      color: ${theme.color.G5};
+      span {
+        text-decoration-line: line-through;
+        color: ${theme.color.G5};
+      }
     `}
 `;
 
