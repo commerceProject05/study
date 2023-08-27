@@ -15,3 +15,4 @@ export const theme = {
     G8: '#F8F9FA',
   },
 };
+
