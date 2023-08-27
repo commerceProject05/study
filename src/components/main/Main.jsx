@@ -32,9 +32,7 @@ const Main = () => {
     setAllFilterclicked(true)
     setTodoFilterclicked(false)
     setDoneFilterclicked(false)
-    if (allFilterclicked === true) {
 
-    }
 
   }
   const todoFilterHandler = () => {
@@ -48,6 +46,12 @@ const Main = () => {
     setAllFilterclicked(false)
     setTodoFilterclicked(false)
   }
+
+  const doneTodoHandler = (index) => {
+    selectFilter[index]
+  }
+
+
   console.log(doneFilterclicked)
   return (
     <>
@@ -63,8 +67,7 @@ const Main = () => {
         </Filter>
         {todoItems.map((item, idx) =>
           <Todoitem key={idx}>
-            <div>d</div>
-            <div>{item.text}</div>
+            <div onClick={() => doneTodoHandler(idx)}>{item.text}</div>
             <button onClick={() => deleteItem(idx)}>삭제</button>
           </Todoitem>
         )
