@@ -1,20 +1,26 @@
-import { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import { getTodos } from '@/apis/todos';
 
 export function useTodo() {
   const [todos, setTodos] = useState([]);
   const [filter, setFilter] = useState('ALL');
-  const nextRef = useRef(1);
+
+  useEffect(() => {
+    getTodos().then((data) => setTodos(data));
+  }, []);
 
   const handleChangeFilter = (filter) => {
     setFilter(filter);
   };
 
-  const handleAddTodo = (todoText) => {
+  const handleAddTodo = async (todoText) => {
     const newTodo = {
-      id: nextRef.current++,
-      text: todoText,
+      id: Date.now(),
+      content: todoText,
       done: false,
     };
+
     setTodos((prev) => [...prev, newTodo]);
   };
 
@@ -28,7 +34,7 @@ export function useTodo() {
   };
 
   return {
-    todos: getTodos(todos, filter),
+    todos: getTodosFilter(todos, filter),
     filter,
     onChangeFilter: handleChangeFilter,
     onAddTodo: handleAddTodo,
@@ -37,7 +43,7 @@ export function useTodo() {
   };
 }
 
-const getTodos = (todos, filter) => {
+const getTodosFilter = (todos, filter) => {
   if (filter === 'TODO') return todos.filter((todo) => !todo.done);
   if (filter === 'DONE') return todos.filter((todo) => todo.done);
   return todos;
