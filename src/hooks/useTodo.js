@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { createTodo, deleteTodo, getTodos } from '@/apis/todos';
+import { createTodo, deleteTodo, getTodos, updateTodo } from '@/apis/todos';
 
 export function useTodo() {
   const [todos, setTodos] = useState([]);
@@ -29,9 +29,9 @@ export function useTodo() {
     setTodos((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const handleUpdateTodoOone = (id) => {
-    const updatedTodos = todos.map((item) => (item.id === id ? { ...item, done: !item.done } : item));
-    setTodos(() => updatedTodos);
+  const handleUpdateTodoDone = async (id, todo) => {
+    const updatedTodo = await updateTodo(id, { ...todo, done: !todo.done });
+    setTodos(() => todos.map((item) => (item.id === updatedTodo.id ? updatedTodo : item)));
   };
 
   return {
@@ -40,7 +40,7 @@ export function useTodo() {
     onChangeFilter: handleChangeFilter,
     onAddTodo: handleAddTodo,
     onDeleteTodo: handleDeleteTodo,
-    onUpdatedTodoDone: handleUpdateTodoOone,
+    onUpdatedTodoDone: handleUpdateTodoDone,
   };
 }
 

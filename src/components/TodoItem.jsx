@@ -12,7 +12,7 @@ const TodoItem = ({ todo, onDeleteTodo, onUpdatedTodoDone }) => {
   };
 
   return (
-    <TodoItemContainer onClick={() => onUpdatedTodoDone(id)} data-todo-id={id} $done={done}>
+    <TodoItemContainer onClick={() => onUpdatedTodoDone(id, todo)} data-todo-id={id} $done={done}>
       <span>{content}</span>
       <Button onClick={handleDelete}>삭제</Button>
     </TodoItemContainer>
