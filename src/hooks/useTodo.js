@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { createTodo, getTodos } from '@/apis/todos';
+import { createTodo, deleteTodo, getTodos } from '@/apis/todos';
 
 export function useTodo() {
   const [todos, setTodos] = useState([]);
@@ -24,7 +24,8 @@ export function useTodo() {
     setTodos((prev) => [...prev, createdData]);
   };
 
-  const handleDeleteTodo = (id) => {
+  const handleDeleteTodo = async (id) => {
+    await deleteTodo(id);
     setTodos((prev) => prev.filter((item) => item.id !== id));
   };
 
