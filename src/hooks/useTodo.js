@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { getTodos } from '@/apis/todos';
+import { createTodo, getTodos } from '@/apis/todos';
 
 export function useTodo() {
   const [todos, setTodos] = useState([]);
@@ -20,8 +20,8 @@ export function useTodo() {
       content: todoText,
       done: false,
     };
-
-    setTodos((prev) => [...prev, newTodo]);
+    const createdData = await createTodo(newTodo);
+    setTodos((prev) => [...prev, createdData]);
   };
 
   const handleDeleteTodo = (id) => {
