@@ -32,7 +32,7 @@ const Todo = () => {
     setTodos(todos.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : todo)));
   };
 
-  const itemList = todos.map((todo) => (
+  const ItemList = todos.map((todo) => (
     <li key={todo.id} onClick={() => handleToggle(todo.id)} style={{ textDecoration: todo.done && 'line-through' }}>
       {todo.text}
       <button
@@ -57,7 +57,7 @@ const Todo = () => {
           <button>TODO</button>
           <button>DONE</button>
         </div>
-        <TodoItem>{itemList}</TodoItem>
+        <TodoItem>{ItemList}</TodoItem>
       </Container>
     </Wrapper>
   );
