@@ -1,58 +1,67 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
+
 
 
 
 const Main = () => {
 
+
   const [todoItems, setTodoItems] = useState([])
-  const [selectFilter, setSelectFilter] = useState()
-  const [allFilterclicked, setAllFilterclicked] = useState(true);
-  const [todoFilterclicked, setTodoFilterclicked] = useState(false);
-  const [doneFilterclicked, setDoneFilterclicked] = useState(false);
+  const [filterItem, setFilterItem] = useState([])
+  const [filterType, setFilterType] = useState('ALL')
 
   const createTodolist = (event) => {
-    if (event.key === 'Enter') {
-      setTodoItems([...todoItems, {
-        id: Date.now(),
-        text: event.target.value,
-        done: false
-      },
-      ]);
-      event.target.value = ''
+    if (event.target.value.trim() !== '') {
+      if (event.key === 'Enter') {
+        setTodoItems([...todoItems, {
+          id: Date.now(),
+          text: event.target.value,
+          done: false
+        }]);
+        event.target.value = ''
+      }
     }
   };
 
-  const deleteItem = (index) => {
-    const newTodoItems = [...todoItems];
-    newTodoItems.splice(index, 1);
+  useEffect(() => {
+    setFilterItem([...todoItems])
+  }, [todoItems])
+
+
+
+  const deleteItem = (selectItem) => {
+    const newTodoItems = todoItems.filter((item) => (item.id !== selectItem.id));
     setTodoItems(newTodoItems);
   }
-  const allFilterHandler = () => {
-    setAllFilterclicked(true)
-    setTodoFilterclicked(false)
-    setDoneFilterclicked(false)
+
+
+  const filterTypeHandler = (type) => {
+    setFilterType(type)
+
+    if (type === "ALL") {
+      setFilterItem(todoItems)
+    } else if (type === "TODO") {
+      const newFilterItem = todoItems.filter((item) => item.done === false)
+      setFilterItem(newFilterItem)
+    } else if (type === "DONE") {
+      const newFilterItem = todoItems.filter((item) => item.done === true)
+      setFilterItem(newFilterItem)
+    }
 
 
   }
-  const todoFilterHandler = () => {
-    setTodoFilterclicked(true)
-    setAllFilterclicked(false)
-    setDoneFilterclicked(false)
 
-  }
-  const doneFilterHandler = () => {
-    setDoneFilterclicked(true)
-    setAllFilterclicked(false)
-    setTodoFilterclicked(false)
-  }
 
   const doneTodoHandler = (index) => {
-    selectFilter[index]
+    const updatedItems = [...todoItems];
+    updatedItems[index].done = !updatedItems[index].done;
+    setTodoItems(updatedItems)
   }
 
 
-  console.log(doneFilterclicked)
+
+
   return (
     <>
       <Container>
@@ -60,20 +69,20 @@ const Main = () => {
         <Filter>
           <div></div>
           <FilterMenu >
-            <Allfilter allFilterclicked={allFilterclicked} onClick={allFilterHandler} >all</Allfilter>
-            <Todofilter todoFilterclicked={todoFilterclicked} onClick={todoFilterHandler}>todo</Todofilter>
-            <DoneFilter doneFilterclicked={doneFilterclicked} onClick={doneFilterHandler}>done</DoneFilter>
+            <Allfilter onClick={() => filterTypeHandler("ALL")} filterType={filterType}>ALL</Allfilter>
+            <Todofilter onClick={() => filterTypeHandler("TODO")} filterType={filterType}>TODO</Todofilter>
+            <DoneFilter onClick={() => filterTypeHandler("DONE")} filterType={filterType}>DONE</DoneFilter>
           </FilterMenu>
         </Filter>
-        {todoItems.map((item, idx) =>
-          <Todoitem key={idx}>
+        {filterItem.map((item, idx) =>
+          <Todoitem key={idx} isCheck={item.done} >
             <div onClick={() => doneTodoHandler(idx)}>{item.text}</div>
-            <button onClick={() => deleteItem(idx)}>삭제</button>
+            <button onClick={() => deleteItem(item)}>삭제</button>
           </Todoitem>
         )
         }
 
-      </Container>
+      </Container >
     </>
   );
 };
@@ -106,49 +115,50 @@ width: 750px;
 display: flex;
 justify-content: space-between;
 padding: 10px;
+border: 1px solid ${props => (props.isCheck ? "#D2FA64" : "white")};
 
 
 `
 
 const Filter = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
+display: flex;
+justify-content: space-between;
+margin-bottom: 10px;
 `
 
 const FilterMenu = styled.div`
-  display: flex;
+display: flex;
 `
 
 const Allfilter = styled.div`
-    cursor: pointer;
-    margin-left: 1rem;
-    color: ${props => (props.allFilterclicked ? "#D2FA64" : "white")};
-    font-family: Roboto;
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+cursor: pointer;
+margin-left: 1rem;
+color: ${props => (props.filterType === "ALL" ? "#D2FA64" : "white")};
+font-family: Roboto;
+font-size: 25px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
 `
 
 const Todofilter = styled.div`
-    cursor: pointer;
-    margin-left: 1rem;
-    color: ${props => (props.todoFilterclicked ? "#D2FA64" : "white")};
-    font-family: Roboto;
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+cursor: pointer;
+margin-left: 1rem;
+color: ${props => (props.filterType === "TODO" ? "#D2FA64" : "white")};
+font-family: Roboto;
+font-size: 25px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
 `
 
 const DoneFilter = styled.div`
-    cursor: pointer;
-    margin-left: 1rem;
-    color: ${props => (props.doneFilterclicked ? "#D2FA64" : "white")};
-    font-family: Roboto;
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+cursor: pointer;
+margin-left: 1rem;
+color: ${props => (props.filterType === "DONE" ? "#D2FA64" : "white")};
+font-family: Roboto;
+font-size: 25px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
 `
