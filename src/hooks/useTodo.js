@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react';
 
-import { createTodo, deleteTodo, getTodos, updateTodo } from '@/apis/todos';
+import { client } from '@/apis/index.js';
+import { deleteTodo, updateTodo } from '@/apis/todos';
 
 export function useTodo() {
   const [todos, setTodos] = useState([]);
   const [filter, setFilter] = useState('ALL');
 
   useEffect(() => {
-    getTodos().then((data) => setTodos(data));
+    // getTodos().then((data) => setTodos(data));
+    client.get('/todos').then((response) => {
+      const data = response.data;
+      setTodos(data);
+    });
   }, []);
 
   const handleChangeFilter = (filter) => {
@@ -20,8 +25,11 @@ export function useTodo() {
       content: todoText,
       done: false,
     };
-    const createdData = await createTodo(newTodo);
+    // const createdData = await createTodo(newTodo);
+    const response = await client.post('/todo', newTodo);
+    const createdData = response.data;
     setTodos((prev) => [...prev, createdData]);
+    // setTodos((prev) => [...prev, response.data]);
   };
 
   const handleDeleteTodo = async (id) => {
@@ -30,8 +38,8 @@ export function useTodo() {
   };
 
   const handleUpdateTodoDone = async (id, todo) => {
-    const updatedTodo = await updateTodo(id, { ...todo, done: !todo.done });
-    setTodos(() => todos.map((item) => (item.id === updatedTodo.id ? updatedTodo : item)));
+    const updatedTodo = await updateTodo(id, { ...todo, done: !todo.done }); // 서버에서 데이터 변경
+    setTodos(() => todos.map((item) => (item.id === updatedTodo.id ? updatedTodo : item))); // 클라이언트에도 데이터 변경을 시켜주기 위함
   };
 
   return {
