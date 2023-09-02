@@ -1,5 +1,5 @@
 import { theme } from '@/styles/theme';
-import { styled } from '@emotion/styled';
+import styled from '@emotion/styled';
 
 export const Wrapper = styled.div`
   height: 100vh;

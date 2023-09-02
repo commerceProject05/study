@@ -7,17 +7,22 @@ const initialState = [
   { id: 3, text: '내용입력 예시3', done: false },
 ];
 
+const tabData = [
+  { id: 'all', title: 'all', done: true, content: `${initialState}` },
+  { id: 'todo', title: 'todo', done: false, content: `${initialState}` },
+  { id: 'done', title: 'done', done: false, content: `${initialState}` },
+];
+
 let nextId = 4;
 
 const Todo = () => {
   const [todos, setTodos] = useState(initialState);
   const [input, setInput] = useState('');
+  const [activeTab, setActiveTab] = useState('all');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setTodos([...todos, { id: nextId++, text: input, done: false }]);
-
-    console.log(nextId);
   };
 
   const handleInput = (e) => {
@@ -32,13 +37,27 @@ const Todo = () => {
     setTodos(todos.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : todo)));
   };
 
-  const ItemList = todos.map((todo) => (
+  const filteredTodos = todos.filter((todo) => {
+    if (activeTab === 'all') {
+      return true;
+    } else if (activeTab === 'todo') {
+      return !todo.done;
+    } else if (activeTab === 'done') {
+      return todo.done;
+    }
+    return true;
+  });
+
+  const ItemList = filteredTodos.map((todo) => (
     <li key={todo.id} onClick={() => handleToggle(todo.id)} style={{ textDecoration: todo.done && 'line-through' }}>
       {todo.text}
       <button
         onClick={(e) => {
           e.stopPropagation();
           handleRemove(todo.id);
+        }}
+        style={{
+          color: todo.done ? '#D2FA64' : '#F8F9FA',
         }}
       >
         <img src="trash.svg" alt="삭제버튼" style={{ textDecoration: todo.done && 'line-through' }} />
@@ -53,9 +72,18 @@ const Todo = () => {
           <input type="text" onChange={handleInput} placeholder="할 일을 입력 후, Enter 를 누르세요" />
         </form>
         <div className="button_box">
-          <button>ALL</button>
-          <button>TODO</button>
-          <button>DONE</button>
+          {tabData.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={activeTab === tab.id ? 'active' : ''}
+              style={{
+                color: tab.done ? '#D2FA64' : '#F8F9FA',
+              }}
+            >
+              {tab.title}
+            </button>
+          ))}
         </div>
         <TodoItem>{ItemList}</TodoItem>
       </Container>
