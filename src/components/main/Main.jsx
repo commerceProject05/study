@@ -30,10 +30,7 @@ const Main = () => {
 
 
 
-  const deleteItem = (selectItem) => {
-    const newTodoItems = todoItems.filter((item) => (item.id !== selectItem.id));
-    setTodoItems(newTodoItems);
-  }
+
 
 
   const filterTypeHandler = (type) => {
@@ -48,8 +45,12 @@ const Main = () => {
       const newFilterItem = todoItems.filter((item) => item.done === true)
       setFilterItem(newFilterItem)
     }
+  }
 
-
+  const deleteItem = (selectItem) => {
+    const newTodoItems = todoItems.filter((item) => (item.id !== selectItem.id));
+    setTodoItems(newTodoItems);
+    console.log(filterType)
   }
 
 
