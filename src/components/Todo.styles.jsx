@@ -52,13 +52,15 @@ export const Container = styled.div`
       display: flex;
       height: 29.053px;
 
-      color: ${theme.color.primary};
-      /* color: ${theme.color.G8}; */
+      color: ${theme.color.G8};
       font-family: Roboto;
       font-size: 25px;
       font-style: normal;
       font-weight: 700;
       line-height: normal;
+      &.active {
+        color: ${theme.color.primary};
+      }
     }
   }
 `;

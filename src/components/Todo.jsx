@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container, TodoItem, Wrapper } from './Todo.styles';
+import { theme } from '@/styles/theme';
 
 const initialState = [
   { id: 1, text: '내용입력 예시1', done: true },
@@ -8,9 +9,9 @@ const initialState = [
 ];
 
 const tabData = [
-  { id: 'all', title: 'all', done: true, content: `${initialState}` },
-  { id: 'todo', title: 'todo', done: false, content: `${initialState}` },
-  { id: 'done', title: 'done', done: false, content: `${initialState}` },
+  { id: 'all', title: 'all', content: initialState },
+  { id: 'todo', title: 'todo', content: initialState },
+  { id: 'done', title: 'done', content: initialState },
 ];
 
 let nextId = 4;
@@ -18,7 +19,8 @@ let nextId = 4;
 const Todo = () => {
   const [todos, setTodos] = useState(initialState);
   const [input, setInput] = useState('');
-  const [activeTab, setActiveTab] = useState('all');
+  // const [activeTab, setActiveTab] = useState(tabData);
+  const [activeTab, setActiveTab] = useState(tabData[0].id);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -56,9 +58,6 @@ const Todo = () => {
           e.stopPropagation();
           handleRemove(todo.id);
         }}
-        style={{
-          color: todo.done ? '#D2FA64' : '#F8F9FA',
-        }}
       >
         <img src="trash.svg" alt="삭제버튼" style={{ textDecoration: todo.done && 'line-through' }} />
       </button>
@@ -75,11 +74,8 @@ const Todo = () => {
           {tabData.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => setActiveTab(tab.title)}
               className={activeTab === tab.id ? 'active' : ''}
-              style={{
-                color: tab.done ? '#D2FA64' : '#F8F9FA',
-              }}
             >
               {tab.title}
             </button>
