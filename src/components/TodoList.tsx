@@ -1,9 +1,16 @@
 import styled from '@emotion/styled';
 
+import { Todo } from '@/apis/todos';
 import TodoItem from '@/components/TodoItem.jsx';
 import { theme } from '@/styles/theme.js';
 
-export function TodoList({ todos, onDeleteTodo, onUpdatedTodoDone }) {
+type TodoListProps = {
+  todos: Todo[];
+  onDeleteTodo: (id: number) => void;
+  onUpdatedTodoDone: (id: number, todo: Todo) => void;
+};
+
+export function TodoList({ todos, onDeleteTodo, onUpdatedTodoDone }: TodoListProps) {
   return (
     <TodoListWrapper>
       {todos.length === 0 ? (
