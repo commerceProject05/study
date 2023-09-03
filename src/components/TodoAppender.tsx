@@ -1,13 +1,21 @@
-import React from 'react';
+import { FormEvent } from 'react';
 import styled from '@emotion/styled';
 
-import useInput from '@/hooks/useInput.js';
+import { useInput } from '@/hooks/useInput.ts';
 import { theme } from '@/styles/theme.js';
 
-const TodoAppender = ({ onAddTodo }) => {
+type TodoAppenderProps = {
+  onAddTodo: (value: string) => void;
+};
+const TodoAppender = ({ onAddTodo }: TodoAppenderProps) => {
   const { value, onChange, onReset } = useInput('');
 
-  const handleSubmit = (event) => {
+  // <>
+  // useState 는 숫자가 올 수도 있고 문자도 있고 배열도 올 수 있고, 객체도 올 수 있음
+
+  // const [count, setCount] = useState<number>(0);
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (value.trim() === '') return;
 
