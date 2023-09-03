@@ -8,7 +8,7 @@ const Main = () => {
 
 
   const [todoItems, setTodoItems] = useState([])
-  const [filterItem, setFilterItem] = useState([])
+  const [filterItem, setFilterItem] = useState([]);
   const [filterType, setFilterType] = useState('ALL')
 
   const createTodolist = (event) => {
@@ -25,39 +25,48 @@ const Main = () => {
   };
 
   useEffect(() => {
-    setFilterItem([...todoItems])
-  }, [todoItems])
-
-
-
-
+    if (filterType === "ALL") {
+      setFilterItem(todoItems)
+    }
+  }, [todoItems, filterType])
 
 
   const filterTypeHandler = (type) => {
-    setFilterType(type)
+    setFilterType(type);
 
     if (type === "ALL") {
-      setFilterItem(todoItems)
+      setFilterItem(todoItems);
     } else if (type === "TODO") {
-      const newFilterItem = todoItems.filter((item) => item.done === false)
-      setFilterItem(newFilterItem)
+      const newFilterItem = todoItems.filter((item) => !item.done);
+      setFilterItem(newFilterItem);
     } else if (type === "DONE") {
-      const newFilterItem = todoItems.filter((item) => item.done === true)
-      setFilterItem(newFilterItem)
+      const newFilterItem = todoItems.filter((item) => item.done);
+      setFilterItem(newFilterItem);
     }
   }
 
   const deleteItem = (selectItem) => {
-    const newTodoItems = todoItems.filter((item) => (item.id !== selectItem.id));
+    const newTodoItems = todoItems.filter((item) => item.id !== selectItem.id);
     setTodoItems(newTodoItems);
-    console.log(filterType)
+
+    // 현재 필터링 유형에 따라 filterItem 배열 업데이트
+    if (filterType === "ALL") {
+      setFilterItem(newTodoItems);
+    } else if (filterType === "TODO") {
+      const newFilterItem = newTodoItems.filter((item) => !item.done);
+      setFilterItem(newFilterItem);
+    } else if (filterType === "DONE") {
+
+      const newFilterItem = newTodoItems.filter((item) => item.done);
+      setFilterItem(newFilterItem);
+    }
   }
 
 
   const doneTodoHandler = (index) => {
-    const updatedItems = [...todoItems];
+    const updatedItems = [...filterItem];
     updatedItems[index].done = !updatedItems[index].done;
-    setTodoItems(updatedItems)
+    setFilterItem(updatedItems)
   }
 
 
@@ -91,14 +100,14 @@ const Main = () => {
 export default Main;
 
 const Container = styled.div`
-width: 750px;
+width: 650px;
  margin: auto;
 `
 
 const TodoInput = styled.input`
   font-size:2rem;
   color: white;
-  width: 750px;
+  width: 650px;
   height: 65px;
   margin-bottom: 10px;
   border-radius: 8px;
@@ -112,13 +121,11 @@ border-radius: 8px;
 background: var(--dark-g-35, #212529);
 margin: auto;
 margin-bottom: 10px;
-width: 750px;
+width: 650px;
 display: flex;
 justify-content: space-between;
 padding: 10px;
 border: 1px solid ${props => (props.isCheck ? "#D2FA64" : "white")};
-
-
 `
 
 const Filter = styled.div`
