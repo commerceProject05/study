@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { createTodo, deleteTodo, getTodos, Todo, updateTodo } from '@/apis/todos';
 
-type Filter = 'ALL' | 'TODO' | 'DONE';
+export type Filter = 'ALL' | 'TODO' | 'DONE';
 export function useTodo() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>('ALL');
