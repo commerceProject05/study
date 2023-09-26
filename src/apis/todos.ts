@@ -9,7 +9,7 @@ import { client } from '@/apis/index.ts';
 // };
 
 // export async function getTodos(): Promise<Todo[]> {
-export async function getTodos(): Promise<Todo> {
+export async function getTodos(): Promise<Todo[]> {
   const response = await client.get('/todos');
   return response.data;
 }
@@ -29,6 +29,11 @@ export async function createTodo(payload: Todo): Promise<Todo> {
 
 export async function updateTodo(todoId: number, payload: Partial<Todo>): Promise<Todo> {
   const response = await client.patch(`/todos/${todoId}`, payload);
+  return response.data;
+}
+
+export async function updateTodo2(payload: Partial<Todo>): Promise<Todo> {
+  const response = await client.patch(`/todos/${payload.id}`, payload);
   return response.data;
 }
 

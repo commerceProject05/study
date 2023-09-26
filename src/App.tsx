@@ -1,23 +1,31 @@
 import styled from '@emotion/styled';
+import { useQuery } from '@tanstack/react-query';
 
+import { getTodos } from '@/apis/todos.ts';
 import TodoAppender from '@/components/TodoAppender.js';
 import TodoFilter from '@/components/TodoFilter.js';
 import { TodoList } from '@/components/TodoList.js';
 import { useTodo } from '@/hooks/useTodo.js';
 
 function App() {
-  const { todos, filter, onChangeFilter, onAddTodo, onDeleteTodo, onUpdatedTodoDone } = useTodo();
+  const { filter, onChangeFilter } = useTodo();
+
+  // const todos = [];
+  const { data: todos = [], isError } = useQuery(['b'], () => getTodos());
 
   const handleChangeFilter = (filter: Filter) => {
     onChangeFilter(filter);
   };
 
+  if (isError) return <h2>에러가 발생했습니다</h2>;
   return (
     <TodoPageWrapper>
       <TodoContainer>
-        <TodoAppender onAddTodo={onAddTodo} />
+        <TodoAppender />
         <TodoFilter filter={filter} onChangeFilter={handleChangeFilter} />
-        <TodoList todos={todos} onDeleteTodo={onDeleteTodo} onUpdatedTodoDone={onUpdatedTodoDone} />
+        <TodoList
+          todos={todos} //
+        />
       </TodoContainer>
     </TodoPageWrapper>
   );

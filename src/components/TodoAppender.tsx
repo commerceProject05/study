@@ -1,20 +1,32 @@
 import { FormEvent } from 'react';
 import styled from '@emotion/styled';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { createTodo } from '@/apis/todos.ts';
 import useInput from '@/hooks/useInput.ts';
 import { theme } from '@/styles/theme.ts';
 
-type TodoAppenderProps = {
-  onAddTodo: (todoText: string) => void;
-};
-const TodoAppender = ({ onAddTodo }: TodoAppenderProps) => {
+const TodoAppender = () => {
   const { value, onChange, onReset } = useInput('');
+  const { mutate: createTodoMutate } = useMutation((newTodo: Todo) => createTodo(newTodo));
+  const queryClient = useQueryClient();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (value.trim() === '') return;
 
-    onAddTodo(value);
+    const newTodo: Todo = {
+      id: Date.now(),
+      content: value,
+      done: false,
+    };
+
+    console.log('newTodo', newTodo);
+    createTodoMutate(newTodo, {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(['todo']);
+      },
+    });
     onReset();
   };
 

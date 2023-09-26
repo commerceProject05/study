@@ -5,10 +5,8 @@ import { theme } from '@/styles/theme.ts';
 
 type TodoListProps = {
   todos: Todo[];
-  onDeleteTodo: (id: number) => Promise<void>;
-  onUpdatedTodoDone: (id: number, todo: Todo) => Promise<void>;
 };
-export function TodoList({ todos, onDeleteTodo, onUpdatedTodoDone }: TodoListProps) {
+export function TodoList({ todos }: TodoListProps) {
   return (
     <TodoListWrapper>
       {todos.length === 0 ? (
@@ -18,8 +16,6 @@ export function TodoList({ todos, onDeleteTodo, onUpdatedTodoDone }: TodoListPro
           <TodoItem //
             key={todo.id}
             todo={todo}
-            onDeleteTodo={onDeleteTodo}
-            onUpdatedTodoDone={onUpdatedTodoDone}
           />
         ))
       )}
