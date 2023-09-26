@@ -1,12 +1,18 @@
+import { MouseEvent } from 'react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-import { theme } from '@/styles/theme.js';
+import { theme } from '@/styles/theme.ts';
 
-const TodoItem = ({ todo, onDeleteTodo, onUpdatedTodoDone }) => {
+type TodoItemProps = {
+  todo: Todo;
+  onDeleteTodo: (id: number) => void;
+  onUpdatedTodoDone: (id: number, todo: Todo) => void;
+};
+const TodoItem = ({ todo, onDeleteTodo, onUpdatedTodoDone }: TodoItemProps) => {
   const { id, content, done } = todo;
 
-  const handleDelete = (event) => {
+  const handleDelete = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     onDeleteTodo(id);
   };
@@ -21,7 +27,7 @@ const TodoItem = ({ todo, onDeleteTodo, onUpdatedTodoDone }) => {
 
 export default TodoItem;
 
-export const TodoItemContainer = styled.li`
+export const TodoItemContainer = styled.li<{ $done: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;

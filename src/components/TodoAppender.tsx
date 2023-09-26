@@ -1,13 +1,16 @@
-import React from 'react';
+import { FormEvent } from 'react';
 import styled from '@emotion/styled';
 
-import useInput from '@/hooks/useInput.js';
-import { theme } from '@/styles/theme.js';
+import useInput from '@/hooks/useInput.ts';
+import { theme } from '@/styles/theme.ts';
 
-const TodoAppender = ({ onAddTodo }) => {
+type TodoAppenderProps = {
+  onAddTodo: (todoText: string) => void;
+};
+const TodoAppender = ({ onAddTodo }: TodoAppenderProps) => {
   const { value, onChange, onReset } = useInput('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (value.trim() === '') return;
 

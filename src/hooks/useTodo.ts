@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react';
 
-import { createTodo, deleteTodo, getTodos, updateTodo } from '@/apis/todos';
+import { createTodo, deleteTodo, getTodos, updateTodo } from '@/apis/todos.js';
 
 export function useTodo() {
-  const [todos, setTodos] = useState([]);
-  const [filter, setFilter] = useState('ALL');
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState<Filter>('ALL');
 
   useEffect(() => {
     getTodos().then((data) => setTodos(data));
   }, []);
 
-  const handleChangeFilter = (filter) => {
+  const handleChangeFilter = (filter: Filter) => {
     setFilter(filter);
   };
 
-  const handleAddTodo = async (todoText) => {
-    const newTodo = {
+  const handleAddTodo = async (todoText: string) => {
+    const newTodo: Todo = {
       id: Date.now(),
       content: todoText,
       done: false,
@@ -24,12 +24,12 @@ export function useTodo() {
     setTodos((prev) => [...prev, createdData]);
   };
 
-  const handleDeleteTodo = async (id) => {
+  const handleDeleteTodo = async (id: number) => {
     await deleteTodo(id);
     setTodos((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const handleUpdateTodoDone = async (id, todo) => {
+  const handleUpdateTodoDone = async (id: number, todo: Todo) => {
     const updatedTodo = await updateTodo(id, { ...todo, done: !todo.done });
     setTodos(() => todos.map((item) => (item.id === updatedTodo.id ? updatedTodo : item)));
   };
@@ -44,7 +44,7 @@ export function useTodo() {
   };
 }
 
-const getTodosFilter = (todos, filter) => {
+const getTodosFilter = (todos: Todo[], filter: Filter): Todo[] => {
   if (filter === 'TODO') return todos.filter((todo) => !todo.done);
   if (filter === 'DONE') return todos.filter((todo) => todo.done);
   return todos;

@@ -1,14 +1,14 @@
 import styled from '@emotion/styled';
 
-import TodoAppender from '@/components/TodoAppender.jsx';
-import TodoFilter from '@/components/TodoFilter.jsx';
-import { TodoList } from '@/components/TodoList.jsx';
+import TodoAppender from '@/components/TodoAppender.js';
+import TodoFilter from '@/components/TodoFilter.js';
+import { TodoList } from '@/components/TodoList.js';
 import { useTodo } from '@/hooks/useTodo.js';
 
 function App() {
   const { todos, filter, onChangeFilter, onAddTodo, onDeleteTodo, onUpdatedTodoDone } = useTodo();
 
-  const handleChangeFilter = (filter: any) => {
+  const handleChangeFilter = (filter: Filter) => {
     onChangeFilter(filter);
   };
 

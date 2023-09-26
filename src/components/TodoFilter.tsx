@@ -1,12 +1,16 @@
+import { MouseEvent } from 'react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-import { theme } from '@/styles/theme.js';
+import { theme } from '@/styles/theme.ts';
 
-const TodoFilter = ({ filter, onChangeFilter }) => {
-  const handleClickFilter = (e) => {
-    const filter = e.currentTarget.dataset.filter;
-
+type TodoFilterProps = {
+  filter: Filter;
+  onChangeFilter: (filter: Filter) => void;
+};
+const TodoFilter = ({ filter, onChangeFilter }: TodoFilterProps) => {
+  const handleClickFilter = (event: MouseEvent<HTMLLIElement>) => {
+    const filter = event.currentTarget.dataset.filter as Filter;
     onChangeFilter(filter);
   };
 
@@ -33,7 +37,7 @@ export const Filters = styled.ul`
   gap: 1rem;
 `;
 
-export const FilterItem = styled.li`
+export const FilterItem = styled.li<{ $selected: boolean }>`
   font-weight: 700;
   font-size: 25px;
   line-height: 29px;
