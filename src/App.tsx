@@ -1,7 +1,7 @@
-import { Example } from '@/Example.jsx';
+import Todo from './components/Todo';
 
 function App() {
-  return <Example />;
+  return <Todo />;
 }
 
 export default App;

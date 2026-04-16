@@ -14,4 +14,5 @@ export const theme = {
     G7: '#9C9EA7',
     G8: '#F8F9FA',
   },
+  font: {},
 };
